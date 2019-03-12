@@ -13,8 +13,8 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
-root: /
+url: https://liuwt12138.github.io
+root: /hexo-blog
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
@@ -80,4 +80,4 @@ theme: landscape
 deploy:
   type: git
   repo: git@github.com:liuwt12138/hexo-blog.git
-  branch: published
+  branch: gh-pages
