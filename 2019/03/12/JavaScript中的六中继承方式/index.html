@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Alois Liu">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Alois Liu">
+    
+    <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content>
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>JavaScript中的六中继承方式 · Alois&#39;s Studio</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/hexo-blog/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/hexo-blog/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/hexo-blog/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/hexo-blog/assets/favicon.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/hexo-blog/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/hexo-blog/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/hexo-blog/">Alois&#39;s Studio.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">JavaScript中的六中继承方式</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/hexo-blog/">Alois's Studio.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/hexo-blog/intro/wp1.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            JavaScript中的六中继承方式
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">1.3k</span>阅读时长: <span class="post-count reading-time">5 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/03/12</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/hexo-blog/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/hexo-blog/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Javascript继承的几种方式</span></span><br><span class="line"><span class="comment">//参考：https://www.cnblogs.com/humin/p/4556820.html</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//首先定义父类Animal</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//name属性</span></span><br><span class="line">    <span class="keyword">this</span>.name = name || <span class="string">'Animal'</span>;</span><br><span class="line">    <span class="comment">//实例方法</span></span><br><span class="line">    <span class="keyword">this</span>.sleep = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'is sleeping'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//原型方法</span></span><br><span class="line">Animal.prototype.eat = <span class="function"><span class="keyword">function</span> (<span class="params">food</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'is eating'</span> + food);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//前置内容：js中的new关键字做了什么</span></span><br><span class="line"><span class="comment">//——————————————————————————————————</span></span><br><span class="line"><span class="comment">//使用new关键字调用函数（new Animal(…)）的具体步骤：</span></span><br><span class="line"><span class="comment">//1. 创建空对象obj；</span></span><br><span class="line">　　<span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"><span class="comment">//2. 设置新对象的constructor属性为构造函数的名称，将新对象的__proto__属性指向构造函数的prototype对象；</span></span><br><span class="line">　　obj.__proto__ = Animal.prototype;</span><br><span class="line"><span class="comment">//3. 使用新对象调用构造函数，函数中的this被指向新实例对象：</span></span><br><span class="line">　　Animal.call(obj);　　<span class="comment">//&#123;&#125;.构造函数();          </span></span><br><span class="line"><span class="comment">//4. 将初始化完毕的新对象地址，保存到等号左边的变量中</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//注意：若构造函数中返回this或返回值是基本类型（number、string、boolean、null、undefined）的值，则返回新实例对象；若返回值是引用类型的值，则实际返回值为这个引用类型。</span></span><br><span class="line"><span class="comment">//——————————————————————————————————</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//以下为正文</span></span><br><span class="line"><span class="comment">//----------------------------------------------------------------</span></span><br><span class="line"><span class="comment">//一、原型链继承</span></span><br><span class="line"><span class="comment">// 将父类的实例作为子类的原型</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Dog</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">Dog.prototype = <span class="keyword">new</span> Animal();</span><br><span class="line">Dog.prototype.name = <span class="string">'dog'</span>;</span><br><span class="line"><span class="comment">//test</span></span><br><span class="line"><span class="keyword">var</span> dog1 = <span class="keyword">new</span> Dog();</span><br><span class="line"><span class="built_in">console</span>.log(dog <span class="keyword">instanceof</span> Animal); <span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(dog <span class="keyword">instanceof</span> Dog); <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//这种方法的特点：</span></span><br><span class="line"><span class="comment">//1、实例不仅是子类的实例，也是父类的实例</span></span><br><span class="line"><span class="comment">//2、父类中或者其原型链中新增的属性和方法，子类都可以访问</span></span><br><span class="line"><span class="comment">//3、缺点：如果想要为子类新增原型属性和方法，必须要放在``Dog.prototype = new Animal()``之后，不能放在构造函数中</span></span><br><span class="line"><span class="comment">//4、缺点：不能实现多继承</span></span><br><span class="line"><span class="comment">//5、缺点：创建子类实例使，无法向父类的构造函数传递参数</span></span><br><span class="line"><span class="comment">//6、缺点：来自原型对象的所有属性被所有实例共享，也就是说，当子类的一个实例改变了原型中的某个属性的值，子类的其它实例也会受其影响</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">//二、构造继承</span></span><br><span class="line"><span class="comment">//使用父类的构造函数来增强子类的实例，相当于复制了父类的实例属性给子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Pig</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    Animal.call(name);</span><br><span class="line">    <span class="keyword">this</span>.name = name || <span class="string">'Pig'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//test</span></span><br><span class="line"><span class="keyword">var</span> pig = <span class="keyword">new</span> Pig(<span class="string">'edg_fans'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(pig <span class="keyword">instanceof</span> Animal); <span class="comment">//false</span></span><br><span class="line"><span class="built_in">console</span>.log(pig <span class="keyword">instanceof</span> Pig); <span class="comment">//ture</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//这种方法的特点：</span></span><br><span class="line"><span class="comment">//1、解决了方法一种，子类实例共享父类引用属性的问题</span></span><br><span class="line"><span class="comment">//2、创建子类的实例时，可以向父类传递参数</span></span><br><span class="line"><span class="comment">//3、可以通过call多个父类的构造函数的方式实现多继承</span></span><br><span class="line"><span class="comment">//4、缺点：实例不是父类的实例，仅是子类的实例</span></span><br><span class="line"><span class="comment">//5、缺点：只能继承父类的实例属性和方法，不能继承原型属性和方法，压根就没有用到原型</span></span><br><span class="line"><span class="comment">//6、缺点：无法实现函数复用，每个子类都有父类实例函数的副本，占用更多内存</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">//三、实例继承</span></span><br><span class="line"><span class="comment">//为父类实例添加新特性，作为子类实例返回</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> instance = <span class="keyword">new</span> Animal(name);</span><br><span class="line">    instance.name = name || <span class="string">'Cat'</span>;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//test</span></span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat(<span class="string">'Tom'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Cat); <span class="comment">//false</span></span><br><span class="line"><span class="built_in">console</span>.log(cat <span class="keyword">instanceof</span> Animal); <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//这种方法的特点：</span></span><br><span class="line"><span class="comment">//1、不限制调用方式，可以不使用new关键字，直接调用构造函数即可得到实例</span></span><br><span class="line"><span class="comment">//2、缺点：实例是父类的实例，不是子类的实例（和方法二相反）</span></span><br><span class="line"><span class="comment">//3、缺点：不支持多继承</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">//四、拷贝继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Mouse</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> animal = <span class="keyword">new</span> Animal();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> p <span class="keyword">in</span> animal)&#123;</span><br><span class="line">        Mouse.prototype[p] = animal[p];</span><br><span class="line">    &#125;</span><br><span class="line">    Mouse.prototype.name = name || <span class="string">'Jerry'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//test</span></span><br><span class="line"><span class="keyword">var</span> mouse = <span class="keyword">new</span> Mouse();</span><br><span class="line"><span class="built_in">console</span>.log(mouse <span class="keyword">instanceof</span> Animal); <span class="comment">//false</span></span><br><span class="line"><span class="built_in">console</span>.log(mouse <span class="keyword">instanceof</span> Mouse); <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//这种方法的特点：</span></span><br><span class="line"><span class="comment">//1、支持多继承</span></span><br><span class="line"><span class="comment">//2、缺点：要拷贝父类的属性，效率低，消耗内存</span></span><br><span class="line"><span class="comment">//3、缺点：无法获取父类中[enumlable]为false的方法（不可枚举的方法，for in无法访问）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//--------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">//五、组合继承</span></span><br><span class="line"><span class="comment">//通过调用父类的构造函数，继承父类的属性实现传参，让后将父类实例作为子类的原型，实现函数复用</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Bull</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    Animal.call(name);</span><br><span class="line">    <span class="keyword">this</span>.name = name || <span class="string">'bull'</span>;</span><br><span class="line">&#125;</span><br><span class="line">Bull.prototype = <span class="keyword">new</span> Animal();</span><br><span class="line">Bull.prototype.constructor = Bull;</span><br><span class="line"><span class="comment">//test</span></span><br><span class="line"><span class="keyword">var</span> bull = <span class="keyword">new</span> Bull();</span><br><span class="line"><span class="built_in">console</span>.log(bull <span class="keyword">instanceof</span> Animal); <span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(bull <span class="keyword">instanceof</span> Bull); <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//这种方法的特点：</span></span><br><span class="line"><span class="comment">//1、弥补了方法二的缺点，既可以继承实例的属性和方法，也可以继承原型的属性和方法</span></span><br><span class="line"><span class="comment">//2、同时是子类和父类的实例</span></span><br><span class="line"><span class="comment">//3、可以想父类传递参数</span></span><br><span class="line"><span class="comment">//4、函数可以服用</span></span><br><span class="line"><span class="comment">//5、缺点：调用了两次父类的构造函数，生成了两份实例，只不过子类实例屏蔽了子类原型上的那一份</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//--------------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">//六、寄生组合继承</span></span><br><span class="line"><span class="comment">//通过寄生方式，砍掉父类的实例属性。</span></span><br><span class="line"><span class="comment">//从而在调用两次父类的构造函数时，不会初始化两次实例的方法和属相，避免组合继承的缺点</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Frog</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">    Animal.call(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.name = name || <span class="string">'frog'</span>;</span><br><span class="line">&#125;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">//创建一个没有实例方法的类</span></span><br><span class="line">    <span class="keyword">var</span> Super = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line">    Super.prototype = Animal.prototype;</span><br><span class="line">    <span class="comment">//将实例作为子类的原型</span></span><br><span class="line">    Frog.prototype = <span class="keyword">new</span> Super;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//修复constructor</span></span><br><span class="line">Frog.prototype.constructor = Frog;</span><br><span class="line"><span class="comment">//test</span></span><br><span class="line"><span class="keyword">var</span> frog = <span class="keyword">new</span> Frog(<span class="string">'the_elder'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(frog <span class="keyword">instanceof</span> Frog); <span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(frog <span class="keyword">instanceof</span> Animal); <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//特点：</span></span><br><span class="line"><span class="comment">//除了实现比较复杂，几乎完美</span></span><br></pre></td></tr></table></figure>
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://liuwt12138.github.io">Alois Liu</a>
+            </p><p>原文链接：<a href="https://liuwt12138.github.io/2019/03/12/JavaScript中的六中继承方式/">https://liuwt12138.github.io/2019/03/12/JavaScript中的六中继承方式/</a>
+            </p><p>发表日期：<a href="https://liuwt12138.github.io/2019/03/12/JavaScript中的六中继承方式/">March 12th 2019, 4:24:32 pm</a>
+            </p><p>更新日期：<a href="https://liuwt12138.github.io/2019/03/12/JavaScript中的六中继承方式/">March 12th 2019, 4:24:39 pm</a>
+            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/hexo-blog/2019/03/12/JavaScript中的类型转换/" title="JavaScript中的类型转换">
+                    <div class="prevTitle">JavaScript中的类型转换</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:739148758@qq.com" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/liuwt12138" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title="wechat">
+                  
+                  <img class="profile-qr" src="/hexo-blog/assets/example_qr.png">
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 3
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href="/hexo-blog/2019/03/12/JavaScript中的六中继承方式/">JavaScript中的六中继承方式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href="/hexo-blog/2019/03/12/JavaScript中的类型转换/">JavaScript中的类型转换</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href="/hexo-blog/2019/03/12/hello-world/">Hello World</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/hexo-blog/",
+        author: "Alois Liu"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/hexo-blog/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/hexo-blog/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/hexo-blog/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

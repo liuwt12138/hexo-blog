@@ -22,7 +22,7 @@
     <meta name="description" content>
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>my real helloworld · Alois&#39;s Studio</title>
+    <title>JavaScript中的类型转换 · Alois&#39;s Studio</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/hexo-blog/">Alois&#39;s Studio.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">my real helloworld</a>
+                <a href="#" class="post-name">JavaScript中的类型转换</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            my real helloworld
+            JavaScript中的类型转换
             <!-- 404 -->
             
         </h1>
@@ -266,7 +266,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">3</span>阅读时长: <span class="post-count reading-time">1 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">2.5k</span>阅读时长: <span class="post-count reading-time">9 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -395,22 +395,30 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>my real helloworld</p>
+        <html lang="zh-cn"><br><div id="main"><br>    <div id="mainContent"><br>    <div class="forFlow"><br><br><div id="post_detail"><br><!--done--><br><div id="topics"><br>    <div class="post"><br>        <h1 class="postTitle"><br>            <a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/Juphy/p/7085197.html" target="_blank" rel="noopener">JS类型转换（强制和自动的规则）</a><br>        </h1><br>        <div class="clear"></div><br>        <div class="postBody"><br>            <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown"><h3 id="显式转换">显式转换</h3><br><p>通过手动进行类型转换，Javascript提供了以下转型函数：</p><br><pre><code>转换为数值类型：Number(mix)、parseInt(string,radix)、parseFloat(string)<br>转换为字符串类型：toString(radix)、String(mix)<br>转换为布尔类型：Boolean(mix)</code></pre><br><ul><br><li><p>1、Number(mix)函数，可以将任意类型的参数mix转换为数值类型。其规则为：</p><br><pre><code>（1）如果是布尔值，true和false分别被转换为1和0<br>（2）如果是数字值，返回本身。<br>（3）如果是null，返回0.<br>（4）如果是undefined，返回NaN。<br>（5）如果是字符串，遵循以下规则：<br>        1、如果字符串中只包含数字，则将其转换为十进制（忽略前导0）<br>        2、如果字符串中包含有效的浮点格式，将其转换为浮点数值（忽略前导0）<br>        3、如果是空字符串，将其转换为0<br>        4、如果字符串中包含非以上格式，则将其转换为NaN<br>（6）如果是对象，则调用对象的valueOf()方法，然后依据前面的规则转换返回的值。如果转换的结果是NaN，则调用对象的toString()方法，再次依照前面的规则转换返回的字符串值。</code></pre></li><br></ul><br><p>下表列出了对象的valueOf()的返回值：</p><br><table><br><thead><br><tr class="header"><br><th align="left">对象</th><br><th align="left">返回值</th><br></tr><br></thead><br><tbody><br><tr class="odd"><br><td align="left">Array</td><br><td align="left">数组的元素被转换为字符串，这些字符串由逗号分隔，连接在一起。其操作与 Array.toString 和 Array.join 方法相同。</td><br></tr><br><tr class="even"><br><td align="left">Boolean</td><br><td align="left">Boolean 值。</td><br></tr><br><tr class="odd"><br><td align="left">Date</td><br><td align="left">存储的时间是从 1970 年 1 月 1 日午夜开始计的毫秒数 UTC。</td><br></tr><br><tr class="even"><br><td align="left">Function</td><br><td align="left">函数本身。</td><br></tr><br><tr class="odd"><br><td align="left">Number</td><br><td align="left">数字值。</td><br></tr><br><tr class="even"><br><td align="left">Object</td><br><td align="left">对象本身。这是默认情况。</td><br></tr><br><tr class="odd"><br><td align="left">String</td><br><td align="left">字符串值。</td><br></tr><br></tbody><br></table><br><p>下面提供几个例子，你能写出它的正确结果吗：</p><br><p>Number(“hello CSSer!”);<br><br>Number(“0×8″);<br><br>Number(“”);<br><br>Number(“020dd”);<br><br>Number(“070″);<br><br>Number(true);</p><br><ul><br><li><p>2、parseInt(string, radix)函数，将字符串转换为整数类型的数值。它也有一定的规则：</p><br><pre><code>（1）忽略字符串前面的空格，直至找到第一个非空字符<br>（2）如果第一个字符不是数字符号或者负号，返回NaN<br>（3）如果第一个字符是数字，则继续解析直至字符串解析完毕或者遇到一个非数字符号为止<br>（4）如果上步解析的结果以0开头，则将其当作八进制来解析；如果以0x开头，则将其当作十六进制来解析<br>（5）如果指定radix参数，则以radix为基数进行解析</code></pre><br><p>小测验：<br><br>parseInt(“hello CSSer!”);<br><br>Number(“0×8″);<br><br>parseInt(“”);<br><br>parseInt(“020dd”);<br><br>parseInt(“070″);<br><br>parseInt(“22.5″);</p></li><br><li><p>3、parseFloat(string)函数，将字符串转换为浮点数类型的数值。</p><br><pre><code>它的规则与parseInt基本相同，但也有点区别：字符串中第一个小数点符号是有效的，另外parseFloat会忽略所有前导0，如果字符串包含一个可解析为整数的数，则返回整数值而不是浮点数值。</code></pre></li><br><li><p>4、toString(radix)方法。除undefined和null之外的所有类型的值都具有toString()方法，其作用是返回对象的字符串表示。</p></li><br></ul><br><table><br><thead><br><tr class="header"><br><th align="left">对象</th><br><th align="left">操作</th><br></tr><br></thead><br><tbody><br><tr class="odd"><br><td align="left">Array</td><br><td align="left">将 Array 的元素转换为字符串。结果字符串由逗号分隔，且连接起来。</td><br></tr><br><tr class="even"><br><td align="left">Boolean</td><br><td align="left">如果 Boolean 值是 true，则返回 “true”。否则，返回 “false”。</td><br></tr><br><tr class="odd"><br><td align="left">Date</td><br><td align="left">返回日期的文字表示法。</td><br></tr><br><tr class="even"><br><td align="left">Error</td><br><td align="left">返回一个包含相关错误信息的字符串。</td><br></tr><br><tr class="odd"><br><td align="left">Function</td><br><td align="left">返回如下格式的字符串，其中 functionname 是被调用 toString 方法函数的名称：function functionname( ) { [native code] }</td><br></tr><br><tr class="even"><br><td align="left">Number</td><br><td align="left">返回数字的文字表示。</td><br></tr><br><tr class="odd"><br><td align="left">String</td><br><td align="left">返回 String 对象的值。</td><br></tr><br><tr class="even"><br><td align="left">默认</td><br><td align="left">返回 “[object objectname]”，其中 objectname 是对象类型的名称。</td><br></tr><br></tbody><br></table><br><ul><br><li><p>5、String(mix)函数，将任何类型的值转换为字符串，其规则为：</p><br><pre><code>（1）如果有toString()方法，则调用该方法（不传递radix参数）并返回结果<br>（2）如果是null，返回”null”<br>（3）如果是undefined，返回”undefined”</code></pre></li><br><li><p>6、Boolean(mix)函数，将任何类型的值转换为布尔值。<br><br>以下值会被转换为false：false、””、0、NaN、null、undefined，其余任何值都会被转换为true。</p></li><br></ul><br><h3 id="隐式转换">隐式转换</h3><br><p>在某些情况下，即使我们不提供显示转换，Javascript也会进行自动类型转换，主要情况有：</p><br><ul><br><li><p>1、 用于检测是否为非数值的函数：isNaN(mix)</p><br><pre><code>    isNaN()函数，经测试发现，该函数会尝试将参数值用Number()进行转换，如果结果为“非数值”则返回true，否则返回false。</code></pre></li><br><li><p>2、递增递减操作符（包括前置和后置）、一元正负符号操作符</p><br><pre><code>    这些操作符适用于任何数据类型的值，针对不同类型的值，该操作符遵循以下规则（经过对比发现，其规则与Number()规则基本相同）：<br>    （1）如果是包含有效数字字符的字符串，先将其转换为数字值（转换规则同Number()），在执行加减1的操作，字符串变量变为数值变量。<br>    （2）如果是不包含有效数字字符的字符串，将变量的值设置为NaN，字符串变量变成数值变量。<br>    （3）如果是布尔值false，先将其转换为0再执行加减1的操作，布尔值变量编程数值变量。<br>    （4）如果是布尔值true，先将其转换为1再执行加减1的操作，布尔值变量变成数值变量。<br>    （5）如果是浮点数值，执行加减1的操作。<br>    （6）如果是对象，先调用对象的valueOf()方法，然后对该返回值应用前面的规则。如果结果是NaN，则调用toString()方法后再应用前面的规则。对象变量变成数值变量。</code></pre><br><p>小测验：<br><br>分别对以下类型的值执行后置递增操作，结果是什么？<br><br>“2″, ”02dd”, ””, false, 22.5, +””, -false, +new Date()</p></li><br><li><p>3、 加法运算操作符<br><br>加号运算操作符在Javascript也用于字符串连接符，所以加号操作符的规则分两种情况：<br><br>如果两个操作值都是数值，其规则为：<br><br>(1)如果一个操作数为NaN，则结果为NaN<br><br>(2)如果是Infinity+Infinity，结果是Infinity<br><br>(3)如果是-Infinity+(-Infinity)，结果是-Infinity<br><br>(4)如果是Infinity+(-Infinity)，结果是NaN<br><br>(5)如果是+0+(+0)，结果为+0<br><br>(6)如果是(-0)+(-0)，结果为-0<br><br>(7)如果是(+0)+(-0)，结果为+0<br><br>如果有一个操作值为字符串，则：<br><br>如果两个操作值都是字符串，则将它们拼接起来<br><br>如果只有一个操作值为字符串，则将另外操作值转换为字符串，然后拼接起来<br><br>如果一个操作数是对象、数值或者布尔值，则调用toString()方法取得字符串值，然后再应用前面的字符串规则。对于undefined和null，分别调用String()显式转换为字符串。<br><br>可以看出，加法运算中，如果有一个操作值为字符串类型，则将另一个操作值转换为字符串，最后连接起来。</p></li><br><li><p>4、 乘除、减号运算符、取模运算符<br><br>这些操作符针对的是运算，所以他们具有共同性：如果操作值之一不是数值，则被隐式调用Number()函数进行转换。具体每一种运算的详细规则请参考ECMAScript中的定义。</p></li><br><li><p>5、 逻辑操作符（!、&amp;&amp;、||）<br><br>逻辑非（！）操作符首先通过Boolean()函数将它的操作值转换为布尔值，然后求反。<br><br>一、逻辑与（&amp;&amp;）操作符，如果一个操作值不是布尔值时，遵循以下规则进行转换：<br><br>（1）如果第一个操作数经Boolean()转换后为true，则返回第二个操作值，否则返回第一个值（不是Boolean()转换后的值）<br><br>（2）如果有一个操作值为null，返回null<br><br>（3）如果有一个操作值为NaN，返回NaN<br><br>（4）如果有一个操作值为undefined，返回undefined<br><br>逻辑或（||）操作符，如果一个操作值不是布尔值，遵循以下规则：<br><br>（1）如果第一个操作值经Boolean()转换后为false，则返回第二个操作值，否则返回第一个操作值（不是Boolean()转换后的值）<br><br>（2）对于undefined、null和NaN的处理规则与逻辑与（&amp;&amp;）相同</p></li><br><li><p>6、 关系操作符（&lt;, &gt;, &lt;=, &gt;=）<br><br>与上述操作符一样，关系操作符的操作值也可以是任意类型的，所以使用非数值类型参与比较时也需要系统进行隐式类型转换：<br><br>（1）如果两个操作值都是数值，则进行数值比较<br><br>（2）如果两个操作值都是字符串，则比较字符串对应的字符编码值<br><br>（3）如果只有一个操作值是数值，则将另一个操作值转换为数值，进行数值比较<br><br>（4）如果一个操作数是对象，则调用valueOf()方法（如果对象没有valueOf()方法则调用toString()方法），得到的结果按照前面的规则执行比较<br><br>（5）如果一个操作值是布尔值，则将其转换为数值，再进行比较<br><br>注：NaN是非常特殊的值，它不和任何类型的值相等，包括它自己，同时它与任何类型的值比较大小时都返回false。</p></li><br><li><p>7、 相等操作符（==）<br><br>相等操作符会对操作值进行隐式转换后进行比较：<br><br>（1）如果一个操作值为布尔值，则在比较之前先将其转换为数值<br><br>（2）如果一个操作值为字符串，另一个操作值为数值，则通过Number()函数将字符串转换为数值<br><br>（3）如果一个操作值是对象，另一个不是，则调用对象的valueOf()方法，得到的结果按照前面的规则进行比较<br><br>（4）null与undefined是相等的<br><br>（5）如果一个操作值为NaN，则相等比较返回false<br><br>（6）如果两个操作值都是对象，则比较它们是不是指向同一个对象</p></li><br></ul><br></div><div id="MySignature"></div><br><br></div></div></div></div></div></div></div></html>
+
+
+
 
     </article>
     <!-- license  -->
     
         <div class="license-wrapper">
             <p>原文作者：<a href="https://liuwt12138.github.io">Alois Liu</a>
-            </p><p>原文链接：<a href="https://liuwt12138.github.io/2019/03/12/helloworld/">https://liuwt12138.github.io/2019/03/12/helloworld/</a>
-            </p><p>发表日期：<a href="https://liuwt12138.github.io/2019/03/12/helloworld/">March 12th 2019, 1:38:54 pm</a>
-            </p><p>更新日期：<a href="https://liuwt12138.github.io/2019/03/12/helloworld/">March 12th 2019, 2:56:42 pm</a>
+            </p><p>原文链接：<a href="https://liuwt12138.github.io/2019/03/12/JavaScript中的类型转换/">https://liuwt12138.github.io/2019/03/12/JavaScript中的类型转换/</a>
+            </p><p>发表日期：<a href="https://liuwt12138.github.io/2019/03/12/JavaScript中的类型转换/">March 12th 2019, 4:21:31 pm</a>
+            </p><p>更新日期：<a href="https://liuwt12138.github.io/2019/03/12/JavaScript中的类型转换/">March 12th 2019, 4:21:45 pm</a>
             </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/hexo-blog/2019/03/12/JavaScript中的六中继承方式/" title="JavaScript中的六中继承方式">
+                    <div class="nextTitle">JavaScript中的六中继承方式</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -536,7 +544,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">            JS类型转换（强制和自动的规则）        </span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#显式转换"><span class="toc-number">1.0.1.</span> <span class="toc-text">显式转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#隐式转换"><span class="toc-number">1.0.2.</span> <span class="toc-text">隐式转换</span></a></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -567,9 +575,20 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 2
+        Total : 3
         </div>
         <!-- search  -->
         
@@ -585,12 +604,17 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">03/12</span><a class="archive-post-title" href="/hexo-blog/2019/03/12/hello-world/">Hello World</a>
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href="/hexo-blog/2019/03/12/JavaScript中的六中继承方式/">JavaScript中的六中继承方式</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">03/12</span><a class="archive-post-title" href="/hexo-blog/2019/03/12/helloworld/">my real helloworld</a>
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href="/hexo-blog/2019/03/12/JavaScript中的类型转换/">JavaScript中的类型转换</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href="/hexo-blog/2019/03/12/hello-world/">Hello World</a>
         </li>
     
     </ul></div>
