@@ -30,8 +30,8 @@ social:
   rss:
 # friends
 friends:
-  friendA: //www.baidu.com
-  friendB: //www.google.com
+  SOF: https://stackoverflow.com/
+  掘金: https://juejin.im/
   friendC:
 about:
   enable: true
@@ -48,11 +48,11 @@ SEO_keywords:
 # main title shown in header image
 main_title: Alois's Studio.
 # subtitle
-subtitle: UI = render(data)
+subtitle: CSS is awesome!
 # site haeder image
-site_header_image: '/intro/wp1.jpg'
+site_header_image: '/intro/mooncity-bg.jpg'
 # post haeder image
-post_header_image: '/intro/wp1.jpg'
+post_header_image: '/intro/mooncity-bg.jpg'
 # 404 image
 _404_image: '/intro/404-bg.jpg'
 
